@@ -9,6 +9,25 @@ export class DatabaseService {
 
   constructor() {
     const sqlite = new Database('database.db');
+    // Drop and recreate tables to handle schema changes
+    sqlite.exec(`DROP TABLE IF EXISTS configs;`);
+    sqlite.exec(`DROP TABLE IF EXISTS templates;`);
+    sqlite.exec(`
+      CREATE TABLE configs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        app TEXT NOT NULL,
+        flavor TEXT NOT NULL,
+        config TEXT NOT NULL
+      );
+    `);
+    sqlite.exec(`CREATE UNIQUE INDEX app_flavor_unique ON configs (app, flavor);`);
+    sqlite.exec(`
+      CREATE TABLE templates (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        config TEXT NOT NULL
+      );
+    `);
     this.db = drizzle(sqlite, { schema });
   }
 
