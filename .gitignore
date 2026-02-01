@@ -76,6 +76,7 @@ temp/
 *.tmp
 
 # Flutter / Dart (apps/)
+apps/flutter_app/core
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
